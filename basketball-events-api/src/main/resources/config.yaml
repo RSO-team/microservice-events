@@ -1,0 +1,28 @@
+kumuluzee:
+  name: basketball-events
+  env:
+    name: dev
+  version: 1.0.0
+  server:
+    base-url: http://localhost:8080
+    http:
+      port: 8080
+  datasources:
+    - jndi-name: jdbc/EventsDS
+      connection-url: jdbc:postgresql://localhost:5432/events
+      username: dbuser
+      password: postgres
+  health:
+    checks:
+      data-source-health-check:
+        type: liveness
+        jndi-name: jdbc/EventsDS
+  metrics:
+    web-instrumentation:
+      - name: events-endpoint
+        url-pattern: /v1/events/*
+  rest-client:
+    registrations:
+      - class: image-processing-api
+        url: http://localhost:8082/v1
+        read-timeout: 5000
