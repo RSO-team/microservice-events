@@ -9,5 +9,6 @@ ADD ./api/target/api-1.0.0.jar /app
 EXPOSE 8080
 
 CMD ["java", "-jar", "api-1.0.0.jar"]
+
 #ENTRYPOINT ["java", "-jar", "api-1.0.0.jar"]
 #CMD java -jar api-1.0.0.jar
