@@ -12,11 +12,5 @@
         <module name="lib" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="api" target="11" />
-      <module name="lib" target="11" />
-      <module name="models" target="11" />
-      <module name="services" target="11" />
-    </bytecodeTargetLevel>
   </component>
 </project>
