@@ -6,11 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="basketball-events-lib" />
-        <module name="basketball-events-services" />
-        <module name="basketball-events-api" />
-        <module name="basketball-events-models" />
+        <module name="models" />
+        <module name="api" />
+        <module name="services" />
+        <module name="lib" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="api" target="11" />
+      <module name="lib" target="11" />
+      <module name="models" target="11" />
+      <module name="services" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

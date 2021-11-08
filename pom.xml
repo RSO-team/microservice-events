@@ -8,10 +8,10 @@
     <version>1.0.0</version>
 
     <modules>
-        <module>basketball-events-api</module>
-        <module>basketball-events-lib</module>
-        <module>basketball-events-models</module>
-        <module>basketball-events-services</module>
+        <module>api</module>
+        <module>lib</module>
+        <module>models</module>
+        <module>services</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -19,8 +19,8 @@
     <description>Microservice Events</description>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <kumuluzee.version>3.12.2</kumuluzee.version>

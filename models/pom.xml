@@ -9,11 +9,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>basketball-events-models</artifactId>
+    <artifactId>models</artifactId>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -24,7 +24,7 @@
 
         <dependency>
             <groupId>si.fri.rsoteam</groupId>
-            <artifactId>basketball-events-lib</artifactId>
+            <artifactId>lib</artifactId>
             <version>${project.version}</version>
         </dependency>
 
