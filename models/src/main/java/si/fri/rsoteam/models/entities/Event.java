@@ -1,4 +1,5 @@
 package si.fri.rsoteam.models.entities;
+import si.fri.rsoteam.models.converters.InviteesAtributeConverter;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -25,9 +26,9 @@ public class Event implements java.io.Serializable{
 
     private EventScope eventScope;
 
-    //TODO invitees
-//    @ManyToMany(mappedBy = "id")
-//    private List<User> invitees;
+    @Column
+    @Convert(converter = InviteesAtributeConverter.class)
+    private List<Integer> invitees;
 
     public Integer getId() {
         return id;
@@ -69,15 +70,11 @@ public class Event implements java.io.Serializable{
         this.eventScope = eventScope;
     }
 
-//    public List<User> getInvitees() {
-//        return invitees;
-//    }
-//
-//    public void setInvitees(List<User> invitees) {
-//        this.invitees = invitees;
-//    }
-//
-//    public void addNewInvitee(User newInvitee){
-//        this.invitees.add(newInvitee);
-//    }
+    public List<Integer> getInvitees() {
+        return this.invitees;
+    }
+
+    public void setInvitees(List<Integer> invitees){
+        this.invitees = invitees;
+    }
 }

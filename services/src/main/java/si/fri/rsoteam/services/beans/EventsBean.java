@@ -5,10 +5,7 @@ import si.fri.rsoteam.models.entities.Event;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.logging.Logger;
 
@@ -54,26 +51,28 @@ public class EventsBean {
      * @param id Id of object we want to update.
      * @param event si.fri.rsoteam.models.entities.Event with new properties.
      * @return Response object containing updated event object.
-     * */
-//
-//    @POST
-//    private Response updateEvent(si.fri.rsoteam.models.entities.Event event, Integer id){
-//        this.beginTx();
-//        si.fri.rsoteam.models.entities.Event oldEvent = em.find(si.fri.rsoteam.models.entities.Event.class, id);
-//        oldEvent.setDuration(event.getDuration());
-//        oldEvent.setCreatorId(event.getCreatorId());
-//        oldEvent.setEventScope(event.getEventScope());
-//        oldEvent.setStartsAt(event.getStartsAt());
-//        em.persist(oldEvent);
-//        this.commitTx();
-//        return Response.ok(oldEvent).build();
-//    }
+     */
+
+    @PUT
+    public Response updateEvent(si.fri.rsoteam.models.entities.Event event, Integer id){
+        this.beginTx();
+        si.fri.rsoteam.models.entities.Event oldEvent = em.find(si.fri.rsoteam.models.entities.Event.class, id);
+        oldEvent.setDuration(event.getDuration());
+        oldEvent.setCreatorId(event.getCreatorId());
+        oldEvent.setEventScope(event.getEventScope());
+        oldEvent.setStartsAt(event.getStartsAt());
+        em.persist(oldEvent);
+        this.commitTx();
+        return Response.ok(oldEvent).build();
+    }
+
     /**
      * <p> Remove given object from database if it exists. </p>
      * @param event  si.fri.rsoteam.models.entities.Event to remove from database.
      * @return Response object with status gone if deletion was successful, else returns not found.
-     * */
-    private Response deleteEvent(Event event){
+     */
+    @POST
+    public Response deleteEvent(Event event){
         if(em.find(Event.class, event.getId()) != null) {
             this.beginTx();
             em.remove(event);
