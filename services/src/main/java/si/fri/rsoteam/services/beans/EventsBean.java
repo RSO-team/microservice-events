@@ -1,6 +1,7 @@
 package si.fri.rsoteam.services.beans;
 
-import si.fri.rsoteam.models.entities.Event;
+import org.eclipse.microprofile.metrics.annotation.Timed;
+import si.fri.rsoteam.models.entities.EventEntity;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -25,57 +26,58 @@ public class EventsBean {
      */
     @GET
     @Path("/{id}")
+    @Timed
     public Response getEvent(@PathParam("id") Integer id){
-        Event event = em.find(Event.class, id);
-        if(event == null){
+        EventEntity eventEntity = em.find(EventEntity.class, id);
+        if(eventEntity == null){
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(event).build();
+        return Response.ok(eventEntity).build();
     }
 
     /**
      * <p> Insert the provided book into the database.</p>
-     * @param event The event object that will be created.
+     * @param eventEntity The event object that will be created.
      * @return Response object containing created event object.
      */
     @POST
-    public Response createEvent(Event event){
+    public Response createEvent(EventEntity eventEntity){
         this.beginTx();
-        em.persist(event);
+        em.persist(eventEntity);
         this.commitTx();
-        return Response.status(Response.Status.CREATED).entity(event).build();
+        return Response.status(Response.Status.CREATED).entity(eventEntity).build();
     }
 
     /**
      * <p> Update event with given id. </p>
      * @param id Id of object we want to update.
-     * @param event si.fri.rsoteam.models.entities.Event with new properties.
+     * @param eventEntity si.fri.rsoteam.models.entities.Event with new properties.
      * @return Response object containing updated event object.
      */
 
     @PUT
-    public Response updateEvent(si.fri.rsoteam.models.entities.Event event, Integer id){
+    public Response updateEvent(EventEntity eventEntity, Integer id){
         this.beginTx();
-        si.fri.rsoteam.models.entities.Event oldEvent = em.find(si.fri.rsoteam.models.entities.Event.class, id);
-        oldEvent.setDuration(event.getDuration());
-        oldEvent.setCreatorId(event.getCreatorId());
-        oldEvent.setEventScope(event.getEventScope());
-        oldEvent.setStartsAt(event.getStartsAt());
-        em.persist(oldEvent);
+        EventEntity oldEventEntity = em.find(EventEntity.class, id);
+        oldEventEntity.setDuration(eventEntity.getDuration());
+        oldEventEntity.setCreatorId(eventEntity.getCreatorId());
+        oldEventEntity.setEventScope(eventEntity.getEventScope());
+        oldEventEntity.setStartsAt(eventEntity.getStartsAt());
+        em.persist(oldEventEntity);
         this.commitTx();
-        return Response.ok(oldEvent).build();
+        return Response.ok(oldEventEntity).build();
     }
 
     /**
      * <p> Remove given object from database if it exists. </p>
-     * @param event  si.fri.rsoteam.models.entities.Event to remove from database.
+     * @param eventEntity  si.fri.rsoteam.models.entities.Event to remove from database.
      * @return Response object with status gone if deletion was successful, else returns not found.
      */
     @POST
-    public Response deleteEvent(Event event){
-        if(em.find(Event.class, event.getId()) != null) {
+    public Response deleteEvent(EventEntity eventEntity){
+        if(em.find(EventEntity.class, eventEntity.getId()) != null) {
             this.beginTx();
-            em.remove(event);
+            em.remove(eventEntity);
             this.commitTx();
             return Response.status(Response.Status.GONE).build();
         }else{

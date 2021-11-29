@@ -3,7 +3,7 @@
     <persistence-unit name="microservice-events-jpa" transaction-type="RESOURCE_LOCAL">
         <non-jta-data-source>jdbc/EventsDS</non-jta-data-source>
 
-<!--        <class>si.fri.rsoteam.models.entities.ENTITIY</class>-->
+        <class>si.fri.rsoteam.models.entities.EventEntity</class>
         <class>si.fri.rsoteam.models.converters.InstantAtributeConverter</class>
 
         <properties>

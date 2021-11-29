@@ -9,9 +9,9 @@ kumuluzee:
       port: 8080
   datasources:
     - jndi-name: jdbc/EventsDS
-      connection-url: jdbc:postgresql://localhost:5432/events
-      username: dbuser
-      password: postgres
+      connection-url: jdbc:postgresql://pg-events.clvqrwayazxs.eu-central-1.rds.amazonaws.com/events
+      username: postgres
+      password: postgres12
   health:
     checks:
       data-source-health-check:
@@ -23,6 +23,13 @@ kumuluzee:
         url-pattern: /v1/events/*
   rest-client:
     registrations:
-      - class: image-processing-api
+      - class: events-api
         url: http://localhost:8082/v1
         read-timeout: 5000
+  config:
+    consul:
+      agent: http://localhost:8500
+
+rest-config:
+  maintenance-mode: false
+  api-token: htn12kss3

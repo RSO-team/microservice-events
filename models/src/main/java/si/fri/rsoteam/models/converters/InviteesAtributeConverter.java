@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Converter
+@Converter(autoApply = true)
 public class InviteesAtributeConverter implements AttributeConverter<List<Integer>, String> {
 
     @Override
