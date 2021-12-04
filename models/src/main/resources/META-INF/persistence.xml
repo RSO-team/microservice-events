@@ -5,6 +5,7 @@
 
         <class>si.fri.rsoteam.models.entities.EventEntity</class>
         <class>si.fri.rsoteam.models.converters.InstantAtributeConverter</class>
+        <class>si.fri.rsoteam.models.converters.InviteesAtributeConverter</class>
 
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>

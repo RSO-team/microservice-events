@@ -1,4 +1,5 @@
 package si.fri.rsoteam.models.entities;
+
 import si.fri.rsoteam.models.converters.InviteesAtributeConverter;
 
 import javax.persistence.*;
@@ -7,8 +8,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "events")
-public class EventEntity implements java.io.Serializable{
-    enum EventScope{
+@NamedQuery(name = "User.getAll", query = "SELECT e from EventEntity e")
+public class EventEntity implements java.io.Serializable {
+    public enum EventScope {
         PUBLIC,
         PRIVATE,
         SHARED
@@ -26,9 +28,9 @@ public class EventEntity implements java.io.Serializable{
 
     private EventScope eventScope;
 
-//    @Column
-//    @Convert(converter = InviteesAtributeConverter.class)
-//    private List<Integer> invitees;
+    @Column
+    @Convert(converter = InviteesAtributeConverter.class)
+    private List<Integer> invitees;
 
     public Integer getId() {
         return id;
@@ -70,11 +72,11 @@ public class EventEntity implements java.io.Serializable{
         this.eventScope = eventScope;
     }
 
-//    public List<Integer> getInvitees() {
-//        return this.invitees;
-//    }
-//
-//    public void setInvitees(List<Integer> invitees){
-//        this.invitees = invitees;
-//    }
+    public List<Integer> getInvitees() {
+        return this.invitees;
+    }
+
+    public void setInvitees(List<Integer> invitees) {
+        this.invitees = invitees;
+    }
 }

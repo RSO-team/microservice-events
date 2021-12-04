@@ -1,14 +1,16 @@
 package si.fri.rsoteam.services.beans;
 
 import org.eclipse.microprofile.metrics.annotation.Timed;
+import si.fri.rsoteam.lib.dtos.EventDto;
 import si.fri.rsoteam.models.entities.EventEntity;
+import si.fri.rsoteam.services.mappers.EventMapper;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @RequestScoped
 public class EventsBean {
@@ -16,7 +18,6 @@ public class EventsBean {
 
     @Inject
     private EntityManager em;
-    // TODO Implement CRUD and other required methods
 
     /**
      * <p> Queries the database and returns a specific event based on given id. </p>
@@ -24,64 +25,71 @@ public class EventsBean {
      * @param id THe id of the wanted event.
      * @return Response object containing the requested event, or empty with the NOT_FOUND status.
      */
-    @GET
-    @Path("/{id}")
     @Timed
-    public Response getEvent(@PathParam("id") Integer id){
-        EventEntity eventEntity = em.find(EventEntity.class, id);
-        if(eventEntity == null){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        return Response.ok(eventEntity).build();
+    public EventDto getEvent(Integer id) {
+        return EventMapper.entityToDto(em.find(EventEntity.class, id));
+    }
+
+    /**
+     * <p> Queries the database and returns a specific event based on given id. </p>
+     *
+     * @param id THe id of the wanted event.
+     * @return Response object containing the requested event, or empty with the NOT_FOUND status.
+     */
+    @Timed
+    public List<EventDto> getList() {
+        List<EventEntity> eventEntityList = em.createNamedQuery("User.getAll", EventEntity.class).getResultList();
+        return eventEntityList.stream().map(EventMapper::entityToDto).collect(Collectors.toList());
     }
 
     /**
      * <p> Insert the provided book into the database.</p>
+     *
      * @param eventEntity The event object that will be created.
      * @return Response object containing created event object.
      */
-    @POST
-    public Response createEvent(EventEntity eventEntity){
+    public EventDto createEvent(EventDto eventDto) {
+        EventEntity eventEntity = EventMapper.dtoToEntity(eventDto);
         this.beginTx();
         em.persist(eventEntity);
         this.commitTx();
-        return Response.status(Response.Status.CREATED).entity(eventEntity).build();
+
+        return EventMapper.entityToDto(eventEntity);
     }
 
     /**
      * <p> Update event with given id. </p>
-     * @param id Id of object we want to update.
+     *
+     * @param id          Id of object we want to update.
      * @param eventEntity si.fri.rsoteam.models.entities.Event with new properties.
      * @return Response object containing updated event object.
      */
-
-    @PUT
-    public Response updateEvent(EventEntity eventEntity, Integer id){
+    public EventDto updateEvent(EventDto eventDto, Integer id) {
         this.beginTx();
-        EventEntity oldEventEntity = em.find(EventEntity.class, id);
-        oldEventEntity.setDuration(eventEntity.getDuration());
-        oldEventEntity.setCreatorId(eventEntity.getCreatorId());
-        oldEventEntity.setEventScope(eventEntity.getEventScope());
-        oldEventEntity.setStartsAt(eventEntity.getStartsAt());
-        em.persist(oldEventEntity);
+
+        EventEntity eventEntity = em.find(EventEntity.class, id);
+        eventEntity.setDuration(eventDto.duration);
+        eventEntity.setCreatorId(eventDto.creatorId);
+        eventEntity.setEventScope(EventEntity.EventScope.valueOf(eventDto.eventScope));
+        eventEntity.setStartsAt(eventDto.startsAt);
+
+        em.persist(eventEntity);
         this.commitTx();
-        return Response.ok(oldEventEntity).build();
+
+        return EventMapper.entityToDto(eventEntity);
     }
 
     /**
      * <p> Remove given object from database if it exists. </p>
-     * @param eventEntity  si.fri.rsoteam.models.entities.Event to remove from database.
+     *
+     * @param eventEntity si.fri.rsoteam.models.entities.Event to remove from database.
      * @return Response object with status gone if deletion was successful, else returns not found.
      */
-    @POST
-    public Response deleteEvent(EventEntity eventEntity){
-        if(em.find(EventEntity.class, eventEntity.getId()) != null) {
+    public void deleteEvent(Integer id) {
+        if (em.find(EventEntity.class, id) != null) {
             this.beginTx();
-            em.remove(eventEntity);
+            em.remove(id);
             this.commitTx();
-            return Response.status(Response.Status.GONE).build();
-        }else{
-            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 

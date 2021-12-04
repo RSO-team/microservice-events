@@ -12,7 +12,7 @@ public class InviteesAtributeConverter implements AttributeConverter<List<Intege
 
     @Override
     public String convertToDatabaseColumn(List<Integer> attribute) {
-        return String.join(",", (String[]) attribute.stream().map(String::valueOf).toArray()) ;
+        return attribute.stream().map(String::valueOf).collect(Collectors.joining(","));
     }
 
     @Override

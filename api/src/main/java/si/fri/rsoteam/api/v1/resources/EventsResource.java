@@ -1,5 +1,6 @@
 package si.fri.rsoteam.api.v1.resources;
 
+import si.fri.rsoteam.lib.dtos.EventDto;
 import si.fri.rsoteam.services.beans.EventsBean;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -26,39 +27,38 @@ public class EventsResource {
 
     private Logger log = Logger.getLogger(EventsResource.class.getName());
 
-//    @Inject
-//    private EventsBean eventsBean;
+    @Inject
+    private EventsBean eventsBean;
 
     @Context
     protected UriInfo uriInfo;
 
     @GET
     public Response getObjects() {
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        return Response.ok(eventsBean.getList()).build();
     }
 
     @GET
     @Path("/{objectId}")
-    public Response getObjectById(@PathParam("objectId") Integer id) {
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    public Response getEventById(@PathParam("objectId") Integer id) {
+        return Response.ok(eventsBean.getEvent(id)).build();
     }
 
     @POST
-    public Response createObject(Object object) {
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
-
+    public Response createEvent(EventDto eventDto) {
+        return Response.status(201).entity(eventsBean.createEvent(eventDto)).build();
     }
 
     @PUT
     @Path("{objectId}")
-    public Response putObjectById(@PathParam("objectId") Integer id,
-                                     Object object) {
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    public Response updateEvent(@PathParam("objectId") Integer id, EventDto eventDto) {
+        return Response.status(201).entity(eventsBean.updateEvent(eventDto, id)).build();
     }
 
     @DELETE
     @Path("{objectId}")
-    public Response deleteObject(@PathParam("objectId") Integer id) {
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    public Response deleteEvent(@PathParam("objectId") Integer id) {
+        eventsBean.deleteEvent(id);
+        return Response.status(204).build();
     }
 }
