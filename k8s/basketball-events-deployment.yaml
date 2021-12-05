@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basketball-events-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: basketball-events
+  template:
+    metadata:
+      labels:
+        app: basketball-events
+    spec:
+      containers:
+        - image: lgaljo/rt_basketball_events:2021-12-05-18-20-14
+          name: basketball-events
+          env:
+            - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
+              value: jdbc:postgresql://pg-events.clvqrwayazxs.eu-central-1.rds.amazonaws.com/events
+            - name: KUMULUZEE_DATASOURCES0_USERNAME
+              value: postgres
+            - name: KUMULUZEE_DATASOURCES0_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-pass
+                  key: KUMULUZEE_DATASOURCES0_PASSWORD
+          ports:
+            - containerPort: 8080
+              name: server
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: server
+            initialDelaySeconds: 20
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: server
+            initialDelaySeconds: 20
+            periodSeconds: 3
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: basketball-events
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: server
+  selector:
+    app: basketball-events
