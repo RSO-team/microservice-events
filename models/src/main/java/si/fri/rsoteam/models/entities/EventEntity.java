@@ -1,9 +1,8 @@
 package si.fri.rsoteam.models.entities;
 
-import si.fri.rsoteam.models.converters.InviteesAtributeConverter;
-
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,6 +17,7 @@ public class EventEntity implements java.io.Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "serial")
     private Integer id;
 
     private Integer creatorId;
@@ -28,9 +28,8 @@ public class EventEntity implements java.io.Serializable {
 
     private EventScope eventScope;
 
-    @Column
-    @Convert(converter = InviteesAtributeConverter.class)
-    private List<Integer> invitees;
+    @OneToMany(mappedBy = "event",cascade={CascadeType.PERSIST,CascadeType.REMOVE}, orphanRemoval=true)
+    private List<InviteeEntity> invitees = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -72,11 +71,12 @@ public class EventEntity implements java.io.Serializable {
         this.eventScope = eventScope;
     }
 
-    public List<Integer> getInvitees() {
-        return this.invitees;
+    public List<InviteeEntity> getinvitees() {
+        return invitees;
     }
 
-    public void setInvitees(List<Integer> invitees) {
+    public void setInvitees(List<InviteeEntity> invitees) {
         this.invitees = invitees;
     }
+
 }

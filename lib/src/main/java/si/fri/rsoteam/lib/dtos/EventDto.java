@@ -9,7 +9,7 @@ public class EventDto {
     public Instant startsAt;
     public Integer duration;
     public String eventScope;
-    public List<Integer> invitees;
+    public List<InviteeDto> invitees;
 
     public EventDto() {
     }
