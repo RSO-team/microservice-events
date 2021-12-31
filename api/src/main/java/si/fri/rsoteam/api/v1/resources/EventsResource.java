@@ -1,5 +1,9 @@
 package si.fri.rsoteam.api.v1.resources;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.headers.Header;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import si.fri.rsoteam.lib.dtos.EventDto;
 import si.fri.rsoteam.services.beans.EventsBean;
 
@@ -52,7 +56,7 @@ public class EventsResource {
     @APIResponses({
             @APIResponse(
                     description = "Successfully returned specific event",
-                    responseCode = "200",
+                    responseCode = "200"
             )
     })
     public Response getEventById(@PathParam("objectId") Integer id) {
@@ -64,7 +68,7 @@ public class EventsResource {
     @APIResponses({
             @APIResponse(
                     description = "Successfully created new event",
-                    responseCode = "201",
+                    responseCode = "201"
             )
     })
     public Response createEvent(EventDto eventDto) {
@@ -77,7 +81,7 @@ public class EventsResource {
     @APIResponses({
             @APIResponse(
                     description = "Successfully updated new event",
-                    responseCode = "201",
+                    responseCode = "201"
             )
     })
     public Response updateEvent(@PathParam("objectId") Integer id, EventDto eventDto) {
@@ -90,7 +94,7 @@ public class EventsResource {
     @APIResponses({
             @APIResponse(
                     description = "Successfully deleted event",
-                    responseCode = "204",
+                    responseCode = "204"
             )
     })
     public Response deleteEvent(@PathParam("objectId") Integer id) {
