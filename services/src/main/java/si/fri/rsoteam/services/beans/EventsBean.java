@@ -2,6 +2,8 @@ package si.fri.rsoteam.services.beans;
 
 import com.kumuluz.ee.logs.LogManager;
 import com.kumuluz.ee.logs.Logger;
+import org.eclipse.microprofile.metrics.Histogram;
+import org.eclipse.microprofile.metrics.annotation.Metric;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import si.fri.rsoteam.lib.dtos.EventDto;
 import si.fri.rsoteam.models.entities.EventEntity;
@@ -20,6 +22,11 @@ public class EventsBean {
 
     @Inject
     private EntityManager em;
+
+    @Inject
+    @Metric(name = "invitees_per_event")
+    Histogram histogram;
+
 
     /**
      * <p> Queries the database and returns a specific event based on given id. </p>
@@ -45,7 +52,7 @@ public class EventsBean {
         this.beginTx();
         em.persist(eventEntity);
         this.commitTx();
-
+        histogram.update(eventDto.invitees.size());
         return EventMapper.entityToDto(eventEntity);
     }
 

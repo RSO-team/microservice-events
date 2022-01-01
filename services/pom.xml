@@ -64,5 +64,9 @@
             <version>2.3.3</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.kumuluz.ee.config</groupId>
+            <artifactId>kumuluzee-config-mp</artifactId>
+        </dependency>
     </dependencies>
 </project>
