@@ -1,5 +1,7 @@
 package si.fri.rsoteam.services.beans;
 
+import com.kumuluz.ee.logs.LogManager;
+import com.kumuluz.ee.logs.Logger;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import si.fri.rsoteam.lib.dtos.EventDto;
 import si.fri.rsoteam.models.entities.EventEntity;
@@ -10,12 +12,11 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @RequestScoped
 public class EventsBean {
-    private Logger log = Logger.getLogger(EventsBean.class.getName());
+    private Logger log = LogManager.getLogger(EventsBean.class.getName());
 
     @Inject
     private EntityManager em;

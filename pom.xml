@@ -33,6 +33,7 @@
         <kumuluzee-health.version>2.4.2</kumuluzee-health.version>
         <microprofile-metrics-api.version>2.3.3</microprofile-metrics-api.version>
         <kumuluzee-openapi-mp.version>1.4.0</kumuluzee-openapi-mp.version>
+        <kumuluzee-logs.version>1.4.4</kumuluzee-logs.version>
 
     </properties>
 
@@ -110,6 +111,11 @@
                 <groupId>com.kumuluz.ee.openapi</groupId>
                 <artifactId>kumuluzee-openapi-mp-ui</artifactId>
                 <version>${kumuluzee-openapi-mp.version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>kumuluzee-logs-log4j2</artifactId>
+                <groupId>com.kumuluz.ee.logs</groupId>
+                <version>${kumuluzee-logs.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
