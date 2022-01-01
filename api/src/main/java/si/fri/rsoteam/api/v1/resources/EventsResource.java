@@ -1,5 +1,6 @@
 package si.fri.rsoteam.api.v1.resources;
 
+import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.headers.Header;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
@@ -71,6 +72,7 @@ public class EventsResource {
                     responseCode = "201"
             )
     })
+    @Counted(name = "created_events_counter")
     public Response createEvent(EventDto eventDto) {
         return Response.status(201).entity(eventsBean.createEvent(eventDto)).build();
     }
