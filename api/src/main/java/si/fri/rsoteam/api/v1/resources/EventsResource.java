@@ -1,5 +1,9 @@
 package si.fri.rsoteam.api.v1.resources;
 
+import com.kumuluz.ee.logs.LogManager;
+import com.kumuluz.ee.logs.Logger;
+import com.kumuluz.ee.logs.cdi.Log;
+import com.kumuluz.ee.logs.cdi.LogParams;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.headers.Header;
@@ -22,7 +26,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.logging.Logger;
 
 @ApplicationScoped
 @Path("/events")
@@ -30,7 +33,7 @@ import java.util.logging.Logger;
 @Consumes(MediaType.APPLICATION_JSON)
 public class EventsResource {
 
-    private Logger log = Logger.getLogger(EventsResource.class.getName());
+    private Logger log = LogManager.getLogger(EventsResource.class.getName());
 
     @Inject
     private EventsBean eventsBean;
@@ -47,6 +50,7 @@ public class EventsResource {
                     headers = {@Header(name = "X-Total-Count", description = "Number of objects in list")}
             )
     })
+    @Log(LogParams.METRICS)
     public Response getObjects() {
         return Response.ok(eventsBean.getList()).build();
     }
@@ -60,6 +64,7 @@ public class EventsResource {
                     responseCode = "200"
             )
     })
+    @Log(LogParams.METRICS)
     public Response getEventById(@PathParam("objectId") Integer id) {
         return Response.ok(eventsBean.getEvent(id)).build();
     }
@@ -72,6 +77,7 @@ public class EventsResource {
                     responseCode = "201"
             )
     })
+    @Log(LogParams.METRICS)
     @Counted(name = "created_events_counter")
     public Response createEvent(EventDto eventDto) {
         return Response.status(201).entity(eventsBean.createEvent(eventDto)).build();
@@ -86,6 +92,7 @@ public class EventsResource {
                     responseCode = "201"
             )
     })
+    @Log(LogParams.METRICS)
     public Response updateEvent(@PathParam("objectId") Integer id, EventDto eventDto) {
         return Response.status(201).entity(eventsBean.updateEvent(eventDto, id)).build();
     }
@@ -99,6 +106,7 @@ public class EventsResource {
                     responseCode = "204"
             )
     })
+    @Log(LogParams.METRICS)
     public Response deleteEvent(@PathParam("objectId") Integer id) {
         eventsBean.deleteEvent(id);
         return Response.status(204).build();
