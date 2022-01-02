@@ -13,7 +13,7 @@ spec:
         app: basketball-events
     spec:
       containers:
-        - image: lgaljo/rt_basketball_events:2021-12-06-03-19-12
+        - image: lgaljo/rt_basketball_events:latest
           name: basketball-events
           env:
             - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
