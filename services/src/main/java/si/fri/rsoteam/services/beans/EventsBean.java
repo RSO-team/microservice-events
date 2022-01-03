@@ -27,6 +27,8 @@ public class EventsBean {
     @Metric(name = "invitees_per_event")
     Histogram histogram;
 
+    @Inject
+    private InviteeBean inviteeBean;
 
     /**
      * <p> Queries the database and returns a specific event based on given id. </p>
@@ -77,7 +79,9 @@ public class EventsBean {
 
 
     public void deleteEvent(Integer id) {
-        if (em.find(EventEntity.class, id) != null) {
+        EventEntity eventEntity = em.find(EventEntity.class, id);
+        if (eventEntity != null) {
+            eventEntity.getinvitees().forEach(inviteeEntity -> inviteeBean.deleteInvitee(inviteeEntity.getId()) );
             this.beginTx();
             em.remove(id);
             this.commitTx();
