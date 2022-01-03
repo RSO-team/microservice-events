@@ -50,6 +50,9 @@ kumuluzee:
   config:
     consul:
       agent: http://localhost:8500
+  cors-filter:
+    servlet:
+      allow-origin: "*"
 
 rest-config:
   maintenance-mode: false
