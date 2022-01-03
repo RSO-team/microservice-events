@@ -16,10 +16,14 @@ spec:
         - image: lgaljo/rt_basketball_events:latest
           name: basketball-events
           env:
+            - name: KUMULUZEE_CONFIG_ETCD_HOSTS
+              value: http://etcd:2379
+            - name: KUMULUZEE_DISCOVERY_ETCD_HOSTS
+              value: http://etcd:2379
             - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
               value: jdbc:postgresql://ella.db.elephantsql.com/cucrddsn
             - name: KUMULUZEE_DATASOURCES0_USERNAME
-              value: postgres
+              value: cucrddsn
             - name: KUMULUZEE_DATASOURCES0_PASSWORD
               valueFrom:
                 secretKeyRef:
