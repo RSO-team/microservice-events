@@ -9,10 +9,10 @@ kumuluzee:
       port: 8080
   datasources:
     - jndi-name: jdbc/EventsDS
-      connection-url: jdbc:postgresql://pg-events.clvqrwayazxs.eu-central-1.rds.amazonaws.com/events
-      username: postgres
-      password: postgres12
-      max-pool-size: 3
+      connection-url: jdbc:postgresql://ella.db.elephantsql.com/cucrddsn
+      username: cucrddsn
+      password: Hrcf_Ed3E9Wvt44-5nGKp8QbfzjO92Zi
+      max-pool-size: 1
   health:
     checks:
       data-source-health-check:

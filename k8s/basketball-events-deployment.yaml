@@ -17,13 +17,13 @@ spec:
           name: basketball-events
           env:
             - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
-              value: jdbc:postgresql://pg-events.clvqrwayazxs.eu-central-1.rds.amazonaws.com/events
+              value: jdbc:postgresql://ella.db.elephantsql.com/cucrddsn
             - name: KUMULUZEE_DATASOURCES0_USERNAME
               value: postgres
             - name: KUMULUZEE_DATASOURCES0_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: pg-pass
+                  name: pg-pass-events
                   key: KUMULUZEE_DATASOURCES0_PASSWORD
           ports:
             - containerPort: 8080
