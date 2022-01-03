@@ -2,6 +2,9 @@ package si.fri.rsoteam.services.beans;
 
 import com.kumuluz.ee.logs.LogManager;
 import com.kumuluz.ee.logs.Logger;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.metrics.Histogram;
 import org.eclipse.microprofile.metrics.annotation.Metric;
 import org.eclipse.microprofile.metrics.annotation.Timed;
@@ -13,6 +16,7 @@ import si.fri.rsoteam.services.mappers.InviteeMapper;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +50,34 @@ public class EventsBean {
         return eventEntityList.stream().map(EventMapper::entityToDto).collect(Collectors.toList());
     }
 
+    @CircuitBreaker(requestVolumeThreshold = 3)
+    @Fallback(fallbackMethod = "notAValidString")
+    public String getSomeString(Integer id) throws Exception {
+        if (id == 0) {
+            throw new Exception("There is no zero indices");
+        }
+        return String.format("I'm okay with this integer: %d", id);
+    }
+
+    public String notAValidString(Integer id) {
+        return "0 is not used for SQL database ids";
+    }
+
+    @Timeout(value = 2, unit = ChronoUnit.SECONDS)
+    @CircuitBreaker(requestVolumeThreshold = 3)
+    @Fallback(fallbackMethod = "haveBeenSleepingForTooLong")
+    public String sleepFor(Integer id) {
+        try {
+            Thread.sleep(id);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "I survived";
+    }
+
+    public String haveBeenSleepingForTooLong(Integer id) {
+        return "You have been sleeping for too long";
+    }
 
     public EventDto createEvent(EventDto eventDto) {
         EventEntity eventEntity = EventMapper.dtoToEntity(eventDto);
