@@ -12,7 +12,8 @@ kumuluzee:
       connection-url: jdbc:postgresql://ella.db.elephantsql.com/cucrddsn
       username: cucrddsn
       password: Hrcf_Ed3E9Wvt44-5nGKp8QbfzjO92Zi
-      max-pool-size: 2
+      pool:
+        max-size: 1
   health:
     checks:
       data-source-health-check:
