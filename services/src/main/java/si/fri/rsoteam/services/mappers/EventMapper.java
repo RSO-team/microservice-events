@@ -1,8 +1,10 @@
 package si.fri.rsoteam.services.mappers;
 
 import si.fri.rsoteam.lib.dtos.EventDto;
+import si.fri.rsoteam.lib.dtos.InviteeDto;
 import si.fri.rsoteam.models.entities.EventEntity;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class EventMapper {
@@ -15,6 +17,17 @@ public class EventMapper {
         eventDto.invitees = et.getinvitees().stream().map(InviteeMapper::entityToDto).collect(Collectors.toList());
         eventDto.startsAt = et.getStartsAt();
 
+        return eventDto;
+    }
+
+    public static EventDto entityToDtoWithInvitees(EventEntity et, List<InviteeDto> inviteeDtos) {
+        EventDto eventDto = new EventDto();
+        eventDto.id = et.getId();
+        eventDto.eventScope = String.valueOf(et.getEventScope());
+        eventDto.creatorId = et.getCreatorId();
+        eventDto.duration = et.getDuration();
+        eventDto.invitees = inviteeDtos;
+        eventDto.startsAt = et.getStartsAt();
         return eventDto;
     }
 
