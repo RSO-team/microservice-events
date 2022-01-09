@@ -52,7 +52,7 @@ kind: Service
 metadata:
   name: basketball-events
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - port: 8080
       protocol: TCP
