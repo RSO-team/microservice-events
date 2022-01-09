@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "events")
-@NamedQuery(name = "User.getAll", query = "SELECT e from EventEntity e")
+@NamedQuery(name = "Event.getAll", query = "SELECT e from EventEntity e")
 public class EventEntity implements java.io.Serializable {
     public enum EventScope {
         PUBLIC,

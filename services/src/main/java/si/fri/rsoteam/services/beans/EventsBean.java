@@ -23,11 +23,11 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestScoped
@@ -49,12 +49,12 @@ public class EventsBean {
 
     @Inject
     @DiscoverService(value = "basketball-users")
-    private URL userServiceUrl;
+    private Optional<WebTarget> userServiceUrl;
 
     private Client httpClient;
 
     @PostConstruct
-    private void init() throws URISyntaxException {
+    private void init() {
         httpClient = ClientBuilder.newClient();
     }
 
@@ -73,16 +73,14 @@ public class EventsBean {
 
     @Timed
     public List<EventDto> getList() {
-        List<EventEntity> eventEntityList = em.createNamedQuery("User.getAll", EventEntity.class).getResultList();
+        List<EventEntity> eventEntityList = em.createNamedQuery("Event.getAll", EventEntity.class).getResultList();
 
-        if (userServiceUrl != null) {
+        if (userServiceUrl.isPresent()) {
             try {
                 return eventEntityList.stream().map(eventEntity -> {
                     List<InviteeDto> inviteeDtos = eventEntity.getinvitees().stream().map(i -> {
-                        String host = String.format("%s://%s:%s/v1/users/%d",
-                                userServiceUrl.getProtocol(),
-                                userServiceUrl.getHost(),
-                                userServiceUrl.getPort(),
+                        String host = String.format("%s/v1/users/%d",
+                                userServiceUrl.get().getUri(),
                                 i.getUserId());
                         UserDto response = httpClient
                                 .target(host)
