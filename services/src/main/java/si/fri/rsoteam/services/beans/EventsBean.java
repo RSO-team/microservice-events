@@ -75,28 +75,29 @@ public class EventsBean {
     public List<EventDto> getList() {
         List<EventEntity> eventEntityList = em.createNamedQuery("Event.getAll", EventEntity.class).getResultList();
 
-        if (userServiceUrl.isPresent()) {
-            try {
-                return eventEntityList.stream().map(eventEntity -> {
-                    List<InviteeDto> inviteeDtos = eventEntity.getinvitees().stream().map(i -> {
-                        String host = String.format("%s/v1/users/%d",
-                                userServiceUrl.get().getUri(),
-                                i.getUserId());
-                        UserDto response = httpClient
-                                .target(host)
-                                .request()
-                                .header("apiToken", restConfig.getApiToken())
-                                .get(new GenericType<>() {
-                                });
-                        return InviteeMapper.userDtoToDto(response);
-                    }).collect(Collectors.toList());
-                    return EventMapper.entityToDtoWithInvitees(eventEntity, inviteeDtos);
-                }).collect(Collectors.toList());
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
-        }
-        return eventEntityList.stream().map(EventMapper::entityToDto).collect(Collectors.toList());
+        return userServiceUrl.map(webTarget -> eventEntityList.stream().map(eventEntity -> {
+            List<InviteeDto> inviteeDtos = eventEntity.getinvitees().stream().map(i -> {
+                String host = String.format("%s/v1/users/%d",
+                        webTarget.getUri(),
+                        i.getUserId());
+                try {
+                    UserDto response = httpClient
+                            .target(host)
+                            .request()
+                            .header("apiToken", restConfig.getApiToken())
+                            .get(new GenericType<>() {
+                            });
+                    return InviteeMapper.userDtoToDto(response);
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+
+                    InviteeDto inviteeDto = new InviteeDto();
+                    inviteeDto.userId = i.getUserId();
+                    return inviteeDto;
+                }
+            }).collect(Collectors.toList());
+            return EventMapper.entityToDtoWithInvitees(eventEntity, inviteeDtos);
+        }).collect(Collectors.toList())).orElseGet(() -> eventEntityList.stream().map(EventMapper::entityToDto).collect(Collectors.toList()));
     }
 
     @CircuitBreaker(requestVolumeThreshold = 3)
